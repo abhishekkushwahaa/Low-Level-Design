@@ -19,4 +19,4 @@
 
 ### Abstract Factory
 - Abstract Factory is a creational design pattern that lets you produce families of related objects without specifying their concrete classes.
-- [Abstract Factory Code](abstract_factory.go)
+- [Abstract Factory Code](abstract-factory.go)

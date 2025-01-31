@@ -46,12 +46,12 @@ func planDelivery(logistics Logistics) {
 	transport.Deliver()                      // Polymorphic Call
 }
 
-func main() {
-	// Road Delivery
-	roadLogistics := RoadLogistics{}
-	planDelivery(&roadLogistics)
+// func main() {
+// 	// Road Delivery
+// 	roadLogistics := RoadLogistics{}
+// 	planDelivery(&roadLogistics)
 
-	// Sea Delivery
-	seaLogistics := SeaLogistics{}
-	planDelivery(&seaLogistics)
-}
+// 	// Sea Delivery
+// 	seaLogistics := SeaLogistics{}
+// 	planDelivery(&seaLogistics)
+// }
