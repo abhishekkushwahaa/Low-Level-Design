@@ -76,14 +76,14 @@ func ClientCode(factory FurnitureFactory) {
 	table.Use()
 }
 
-// func main() {
-// 	var factory FurnitureFactory
+func main() {
+	var factory FurnitureFactory
 
-// 	// Use Victorian Furniture Factory
-// 	factory = VFurnitureFactory{}
-// 	ClientCode(factory)
+	// Use Victorian Furniture Factory
+	factory = VFurnitureFactory{}
+	ClientCode(factory)
 
-// 	//Use Modern Furniture Factory
-// 	factory = MFurnitureFactory{}
-// 	ClientCode(factory)
-// }
+	//Use Modern Furniture Factory
+	factory = MFurnitureFactory{}
+	ClientCode(factory)
+}

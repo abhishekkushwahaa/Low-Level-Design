@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"sync"
 )
 
@@ -34,16 +35,16 @@ func (s *Singleton) GetValue() string {
 	return s.value
 }
 
-// func main() {
-// 	// Get the Singleton Instance
-// 	singleton1 := GetInstance("First Instance!")
-// 	fmt.Println(singleton1.GetValue())
+func main() {
+	// Get the Singleton Instance
+	singleton1 := GetInstance("First Instance!")
+	fmt.Println(singleton1.GetValue())
 
-// 	// Get the same Singleton Instance again
-// 	singleton2 := GetInstance("Second Instance!")
-// 	fmt.Println(singleton2.GetValue())
+	// Get the same Singleton Instance again
+	singleton2 := GetInstance("Second Instance!")
+	fmt.Println(singleton2.GetValue())
 
-// 	// Modify the Singleton Instance value
-// 	singleton2.SetValue("Updated Instance!")
-// 	fmt.Println(singleton1.GetValue())
-// }
+	// Modify the Singleton Instance value
+	singleton2.SetValue("Updated Instance!")
+	fmt.Println(singleton1.GetValue())
+}
