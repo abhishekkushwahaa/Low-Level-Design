@@ -54,3 +54,14 @@ func GetInstanceSafeDoubleCheck() *Singleton {
 	}
 	return instance
 }
+
+// 5. sync.Once - Best in Go
+// Benefits: a)- Lazy b)- Thread-safe c)- No locking overhead after initial call
+var once sync.Once
+
+func GetInstanceOnce() *Singleton {
+	once.Do(func() {
+		instance = &Singleton{}
+	})
+	return instance
+}
