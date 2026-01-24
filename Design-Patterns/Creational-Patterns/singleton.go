@@ -65,3 +65,16 @@ func GetInstanceOnce() *Singleton {
 	})
 	return instance
 }
+
+// 6. Closure-Based Singleton: Encapsulates instance inside returned function.
+// Benefits: a)- True encapsulation b)- No global variable exposed
+var GetClosureInstance = func() func() *Singleton {
+	var instance *Singleton // inside closure
+
+	return func() *Singleton {
+		if instance == nil {
+			instance = &Singleton{}
+		}
+		return instance
+	}
+}
