@@ -22,12 +22,27 @@ func GetInstance() *Singleton {
 // Problem: Slow (locks every call)
 var mu sync.Mutex
 
-func GetInstanceSafe() *Singleton {
+func GetInstanceThreadSafe() *Singleton {
 	mu.Lock()
 	defer mu.Unlock()
 
 	if instance == nil {
 		instance = &Singleton{}
+	}
+	return instance
+}
+
+// 3. Double-Checked Locking
+// Benefits: a)- Faster than always locking b)- Safe in Go due to memory model (mostly)
+// Problems: a)- In some languages, unsafe without memory barriers b)- More complex logic
+
+func GetInstanceSafeDoubleCheck() *Singleton {
+	if instance == nil {
+		mu.Lock()
+		defer mu.Unlock()
+		if instance == nil {
+			instance = &Singleton{}
+		}
 	}
 	return instance
 }
