@@ -8,15 +8,15 @@ type Notification interface {
 }
 
 // Concrete products
-type EmailNotifications struct{}
-type WhatsAppNotifications struct{}
+type EmailNotification struct{}
+type WhatsAppNotification struct{}
 
-func (e EmailNotifications) Send(msg string) {
-	fmt.Println("Sending notifications on Email", msg)
+func (e EmailNotification) Send(msg string) {
+	fmt.Println("Sending notification on Email:", msg)
 }
 
-func (w WhatsAppNotifications) Send(msg string) {
-	fmt.Println("Sending notifications on WhatsApp", msg)
+func (w WhatsAppNotification) Send(msg string) {
+	fmt.Println("Sending notification on WhatsApp:", msg)
 }
 
 // 1. Basic Factory Method (switch-based)
@@ -25,10 +25,24 @@ func (w WhatsAppNotifications) Send(msg string) {
 func GetNotification(notificationType string) Notification {
 	switch notificationType {
 	case "email":
-		return EmailNotifications{}
+		return EmailNotification{}
 	case "whatsapp":
-		return WhatsAppNotifications{}
+		return WhatsAppNotification{}
 	default:
 		return nil
 	}
+}
+
+// 2. Factory using Map (Extensible)
+// Benefits: Easy to add new types without modifying logic
+var factoryMap = map[string]func() Notification{
+	"email":    func() Notification { return EmailNotification{} },
+	"whatsapp": func() Notification { return WhatsAppNotification{} },
+}
+
+func GetNotificationMap(notificationType string) Notification {
+	if factory, ok := factoryMap[notificationType]; ok {
+		return factory()
+	}
+	return nil
 }
