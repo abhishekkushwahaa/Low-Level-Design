@@ -10,9 +10,11 @@ type ComputerBuilder struct {
 	computer Computer
 }
 
-// 1. Simpler Builder (Fluent API)
-// Benefits: a)- Readable b)- Flexible c)- Avoids large constructor
-// Problems: a)- No strict construction order b)- Client controls all steps
+/*
+1. Simpler Builder (Fluent API)
+Benefits: a)- Readable b)- Flexible c)- Avoids large constructor
+Problems: a)- No strict construction order b)- Client controls all steps
+*/
 func NewComputerBuilder() *ComputerBuilder {
 	return &ComputerBuilder{}
 }
@@ -31,9 +33,11 @@ func (b *ComputerBuilder) Build() Computer {
 	return b.computer
 }
 
-// 2. Builder with Director
-// Benefits: a)- Separates construction from representation b)- Same process can build different objects
-// Problems: a)- More complex b)- Extra abstraction
+/*
+2. Builder with Director
+Benefits: a)- Separates construction from representation b)- Same process can build different objects
+Problems: a)- More complex b)- Extra abstraction
+*/
 type ComputerBuilderDirector interface {
 	BuildCPU()
 	BuildRAM()
@@ -70,4 +74,44 @@ func (d *Director) Construct() Computer {
 	d.builder.BuildCPU()
 	d.builder.BuildRAM()
 	return d.builder.GetComputer()
+}
+
+/*
+5.3 Builder with Optional Fields (Config Object)
+Benefits:
+a)- Handles optional parameters
+b)- Clean object creation
+c)- Avoids constructor explosion
+*/
+type Server struct {
+	Host string
+	Port int
+	SSL  bool
+}
+
+type ServerBuilder struct {
+	server Server
+}
+
+func NewServerBuilder() *ServerBuilder {
+	return &ServerBuilder{}
+}
+
+func (b *ServerBuilder) SetHost(host string) *ServerBuilder {
+	b.server.Host = host
+	return b
+}
+
+func (b *ServerBuilder) SetPort(port int) *ServerBuilder {
+	b.server.Port = port
+	return b
+}
+
+func (b *ServerBuilder) EnableSSL() *ServerBuilder {
+	b.server.SSL = true
+	return b
+}
+
+func (b *ServerBuilder) Build() Server {
+	return b.server
 }
