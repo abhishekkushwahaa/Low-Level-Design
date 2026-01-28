@@ -25,7 +25,7 @@ func (c *CashStrategy) Pay(amount int) {
 }
 
 /*
-5.1 Basic Strategy (Interface-based)
+1. Basic Strategy (Interface-based)
 Benefits:
 a)- Eliminates if-else conditions
 b)- Follows Open/Closed Principle
@@ -40,7 +40,7 @@ func ProcessPayment(strategy PaymentStrategy, amount int) {
 }
 
 /*
-5.2 Strategy with Context
+2. Strategy with Context
 Benefits:
 a)- Encapsulates strategy usage
 b)- Client code simplified
@@ -68,7 +68,7 @@ func (p *PaymentContext) Pay(amount int) {
 }
 
 /*
-5.3 Strategy Registry (Dynamic Selection)
+3. Strategy Registry (Dynamic Selection)
 Benefits:
 a)- Centralized strategy management
 b)- Easy runtime selection
