@@ -19,9 +19,11 @@ func (w WhatsAppNotification) Send(msg string) {
 	fmt.Println("Sending notification on WhatsApp:", msg)
 }
 
-// 1. Basic Factory Method (switch-based)
-// Benefits: Centralized object creation
-// Problems: Must modify factory for every new type
+/*
+1. Basic Factory Method (switch-based)
+Benefits: Centralized object creation
+Problems: Must modify factory for every new type
+*/
 func GetNotification(notificationType string) Notification {
 	switch notificationType {
 	case "email":
@@ -33,8 +35,10 @@ func GetNotification(notificationType string) Notification {
 	}
 }
 
-// 2. Factory using Map (Extensible)
-// Benefits: Easy to add new types without modifying logic
+/*
+2. Factory using Map (Extensible)
+Benefits: Easy to add new types without modifying logic
+*/
 var factoryMap = map[string]func() Notification{
 	"email":    func() Notification { return EmailNotification{} },
 	"whatsapp": func() Notification { return WhatsAppNotification{} },

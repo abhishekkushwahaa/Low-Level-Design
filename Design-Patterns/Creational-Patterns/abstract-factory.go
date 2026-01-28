@@ -2,12 +2,14 @@ package main
 
 import "fmt"
 
-// Structure :-
-// Abstract Products → Interfaces (Payment, Refund)
-// Concrete Products → UPIFamily, CardFamily
-// Abstract Factory → PaymentFactory
-// Concrete Factories → UPIFactory, CardFactory
-// Client → Uses only interfaces
+/*
+Structure :-
+Abstract Products → Interfaces (Payment, Refund)
+Concrete Products → UPIFamily, CardFamily
+Abstract Factory → PaymentFactory
+Concrete Factories → UPIFactory, CardFactory
+Client → Uses only interfaces
+*/
 
 // Abstract Products
 type Payment interface {

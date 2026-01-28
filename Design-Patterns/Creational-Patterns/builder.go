@@ -77,7 +77,7 @@ func (d *Director) Construct() Computer {
 }
 
 /*
-5.3 Builder with Optional Fields (Config Object)
+3. Builder with Optional Fields (Config Object)
 Benefits:
 a)- Handles optional parameters
 b)- Clean object creation

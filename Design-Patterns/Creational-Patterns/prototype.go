@@ -17,7 +17,7 @@ type Metadata struct {
 }
 
 /*
-5.1 Basic Prototype (Shallow Copy)
+1. Basic Prototype (Shallow Copy)
 Benefits:
 a)- Fast object creation
 b)- Avoids expensive initialization
@@ -32,7 +32,7 @@ func (u *User) Clone() Prototype {
 }
 
 /*
-5.2 Deep Copy Prototype
+2. Deep Copy Prototype
 Benefits:
 a)- Fully independent copy
 b)- Safe for mutable nested objects
@@ -51,7 +51,7 @@ func (u *User) DeepClone() *User {
 }
 
 /*
-5.3 Prototype Registry (Cache/Map)
+3. Prototype Registry (Cache/Map)
 Benefits:
 a)- Centralized prototype management
 b)- Fast object creation from templates
