@@ -2,45 +2,90 @@ package main
 
 import "fmt"
 
-// Strategy Interface
-type RouteStrategy interface {
-	BuildRoute(start, destination string)
+// Strategy interface
+type PaymentStrategy interface {
+	Pay(amount int)
 }
 
-// Concrete Strategy 1 - Driving
-type Driving struct{}
+// Concrete Strategies
+type UPIStrategy struct{}
+type CardStrategy struct{}
+type CashStrategy struct{}
 
-func (d *Driving) BuildRoute(start, destination string) {
-	fmt.Printf("Driving route \n", start, destination)
+func (u *UPIStrategy) Pay(amount int) {
+	fmt.Println("Paid via UPI:", amount)
 }
 
-// Concrete Strategy 2 - Walking
-type Walking struct{}
-
-func (s *Walking) BuildRoute(start, destination string) {
-	fmt.Print("Walking route \n", start, destination)
+func (c *CardStrategy) Pay(amount int) {
+	fmt.Println("Paid via Card:", amount)
 }
 
-// Context - Navigator
-type Navigator struct {
-	Strategy RouteStrategy
+func (c *CashStrategy) Pay(amount int) {
+	fmt.Println("Paid via Cash:", amount)
 }
 
-func (n *Navigator) SetStrategy(strategy RouteStrategy) {
-	n.Strategy = strategy
+/*
+5.1 Basic Strategy (Interface-based)
+Benefits:
+a)- Eliminates if-else conditions
+b)- Follows Open/Closed Principle
+c)- Easy to add new strategies
+Problems:
+a)- More objects created
+b)- Client must choose strategy
+*/
+
+func ProcessPayment(strategy PaymentStrategy, amount int) {
+	strategy.Pay(amount)
 }
 
-func (n *Navigator) BuildRoute(start, destination string) {
-	n.Strategy.BuildRoute(start, destination)
+/*
+5.2 Strategy with Context
+Benefits:
+a)- Encapsulates strategy usage
+b)- Client code simplified
+c)- Strategy can be changed at runtime
+Problems:
+a)- Extra abstraction
+b)- Slight complexity increase
+*/
+
+// Context
+type PaymentContext struct {
+	strategy PaymentStrategy
 }
 
-func main() {
-	navigator := &Navigator{}
-	// Set Driving Strategy
-	navigator.SetStrategy(&Driving{})
-	navigator.BuildRoute("Home -", " Office")
+func NewPaymentContext(strategy PaymentStrategy) *PaymentContext {
+	return &PaymentContext{strategy: strategy}
+}
 
-	// Change to Walking Strategy
-	navigator.SetStrategy(&Walking{})
-	navigator.BuildRoute("Home -", " Park")
+func (p *PaymentContext) SetStrategy(strategy PaymentStrategy) {
+	p.strategy = strategy
+}
+
+func (p *PaymentContext) Pay(amount int) {
+	p.strategy.Pay(amount)
+}
+
+/*
+5.3 Strategy Registry (Dynamic Selection)
+Benefits:
+a)- Centralized strategy management
+b)- Easy runtime selection
+c)- Scalable for many strategies
+Problems:
+a)- Registry maintenance
+b)- Risk of wrong key usage
+*/
+var strategyRegistry = map[string]PaymentStrategy{}
+
+func RegisterStrategy(key string, strategy PaymentStrategy) {
+	strategyRegistry[key] = strategy
+}
+
+func GetStrategy(key string) PaymentStrategy {
+	if strategy, ok := strategyRegistry[key]; ok {
+		return strategy
+	}
+	return nil
 }
