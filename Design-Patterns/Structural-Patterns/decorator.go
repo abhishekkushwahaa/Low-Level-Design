@@ -1,84 +1,111 @@
 package main
 
-import "fmt"
-
-// Component Interface
+// Component interface
 type Coffee interface {
-	Cost() float64
+	Cost() int
 	Description() string
 }
 
-// Concrete component (Basic Coffee)
-type BasicCoffee struct{}
+// Concrete Component
+type SimpleCoffee struct{}
 
-func (b *BasicCoffee) Cost() float64 {
-	return 5.0 // Base Cost of Black Coffee
+func (s *SimpleCoffee) Cost() int {
+	return 100
 }
 
-func (b *BasicCoffee) Description() string {
-	return "Black Coffee"
+func (s *SimpleCoffee) Description() string {
+	return "Simple Coffee"
 }
 
-// Decorator base struct
+/*
+1. Basic Decorator
+Benefits:
+a)- Adds new behavior without modifying existing code
+b)- Follows Open/Closed Principle
+c)- Flexible alternative to subclassing
+Problems:
+a)- Many small structs created
+b)- Can be hard to debug
+*/
+
+// Base Decorator
 type CoffeeDecorator struct {
 	coffee Coffee
 }
 
-// Concrete Decorator
-// Milk Add-On
-type Milk struct {
+func (d *CoffeeDecorator) Cost() int {
+	return d.coffee.Cost()
+}
+
+func (d *CoffeeDecorator) Description() string {
+	return d.coffee.Description()
+}
+
+// Concrete Decorator - Milk
+type MilkDecorator struct {
 	CoffeeDecorator
 }
 
-func (m *Milk) Cost() float64 {
-	return m.coffee.Cost() + 1.5 // Milk Cost = 1.5
+func NewMilkDecorator(c Coffee) Coffee {
+	return &MilkDecorator{CoffeeDecorator{coffee: c}}
 }
 
-func (m *Milk) Description() string {
-	return m.coffee.Description() + " With Milk"
+func (m *MilkDecorator) Cost() int {
+	return m.coffee.Cost() + 20
 }
 
-// Sugar Add-On
-type Sugar struct {
+func (m *MilkDecorator) Description() string {
+	return m.coffee.Description() + ", Milk"
+}
+
+/*
+2. Multiple Decorators (Chaining)
+Benefits:
+a)- Combine multiple features dynamically
+b)- No need for multiple subclasses
+c)- Behavior added at runtime
+Problems:
+a)- Order of decorators matters
+b)- Harder to trace execution flow
+*/
+
+// Concrete Decorator - Sugar
+type SugarDecorator struct {
 	CoffeeDecorator
 }
 
-func (s *Sugar) Cost() float64 {
-	return s.coffee.Cost() + 0.5 // Sugar Cost = 0.5
+func NewSugarDecorator(c Coffee) Coffee {
+	return &SugarDecorator{CoffeeDecorator{coffee: c}}
 }
 
-func (s *Sugar) Description() string {
+func (s *SugarDecorator) Cost() int {
+	return s.coffee.Cost() + 10
+}
+
+func (s *SugarDecorator) Description() string {
 	return s.coffee.Description() + ", Sugar"
 }
 
-// Whipped Cream Add-On
-type WhippedCream struct {
-	CoffeeDecorator
+/*
+3. Decorator Registry (Dynamic Decoration)
+Benefits:
+a)- Centralized decorator management
+b)- Easy to add/remove features dynamically
+c)- Scalable for many decorators
+Problems:
+a)- Registry complexity
+b)- Risk of wrong decorator key usage
+*/
+
+var decoratorRegistry = map[string]func(Coffee) Coffee{}
+
+func RegisterDecorator(key string, decorator func(Coffee) Coffee) {
+	decoratorRegistry[key] = decorator
 }
 
-func (w *WhippedCream) Cost() float64 {
-	return w.coffee.Cost() + 2.5 // Whipped Cream Cost = 2.5
-}
-
-func (w *WhippedCream) Description() string {
-	return w.coffee.Description() + " & Whipped Cream!"
-}
-
-// Client Code
-func main() {
-	// Start with basic black coffee
-	coffee := &BasicCoffee{}
-	fmt.Println(coffee.Description(), "-", coffee.Cost())
-
-	// Add Milk
-	coffeeWithMilk := &Milk{CoffeeDecorator{coffee}}
-	fmt.Println(coffeeWithMilk.Description(), "-", coffeeWithMilk.Cost())
-
-	// Sugar Added
-	coffeeWithMilkandSugar := &Sugar{CoffeeDecorator{coffeeWithMilk}}
-	fmt.Println(coffeeWithMilkandSugar.Description(), "-", coffeeWithMilkandSugar.Cost())
-
-	// Add Whipped Cream
-	coffeeWithAll := &WhippedCream{CoffeeDecorator{coffeeWithMilkandSugar}}
-	fmt.Println(coffeeWithAll.Description(), "-", coffeeWithAll.Cost())
+func GetDecoratedCoffee(key string, coffee Coffee) Coffee {
+	if decorator, ok := decoratorRegistry[key]; ok {
+		return decorator(coffee)
+	}
+	return coffee
 }
